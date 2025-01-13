@@ -27,7 +27,7 @@ module "tfstate_sa" {
   account_tier               = "Standard"
   account_kind               = "StorageV2"
   access_tier = "Hot"
-  location                   = azurerm_resource_group.terraform.location
+  location                   = azurerm_resource_group.homelab.location
   resource_group_name        = azurerm_resource_group.terraform.name
   name = "terraformstate444"
 
@@ -39,7 +39,7 @@ module "tfstate_sa" {
       skip_service_principal_aad_check = false
     },
   }
-
+  allowed_copy_scope = "AAD"
   https_traffic_only_enabled = true
   min_tls_version            = "TLS1_2"
   shared_access_key_enabled  = true
