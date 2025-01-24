@@ -6,6 +6,10 @@ resource "random_string" "this" {
   upper   = false
 }
 
+data "http" "myip" {
+  url = "http://ipv4.icanhazip.com"
+}
+
 resource "azurerm_resource_group" "homelab" {
   location = "northeurope"
   name     = "homelab"
@@ -46,11 +50,7 @@ module "tfstate_sa" {
   public_network_access_enabled = true
   allow_nested_items_to_be_public    = false
 
-  network_rules = {
-    bypass                     = ["Metrics"]
-    default_action             = "Deny"
-    ip_rules                   = [var.homelab_ip]
-  }
+  network_rules = null
 
   lock = {
     name = "delete"
@@ -93,7 +93,7 @@ module "homelab_backup_sa" {
   network_rules = {
     bypass                     = ["Metrics"]
     default_action             = "Deny"
-    ip_rules                   = [var.homelab_ip]
+    ip_rules                   = [chomp(data.http.myip.response_body)]
   }
 
   role_assignments = {
