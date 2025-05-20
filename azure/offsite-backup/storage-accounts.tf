@@ -1,26 +1,12 @@
-
-# This is used to randomize a unique name for storage accounts
-resource "random_string" "this" {
-  length  = 6
-  special = false
-  upper   = false
-}
-
-data "http" "myip" {
-  url = "http://ipv4.icanhazip.com"
-}
-
 resource "azurerm_resource_group" "homelab" {
-  location = "northeurope"
-  name     = "homelab"
+  location = var.location
+  name     = var.resource_group_name
 }
 
 resource "azurerm_resource_group" "terraform" {
   location = "germanywestcentral"
   name     = "terraform"
 }
-
-data "azurerm_client_config" "current" {}
 
 module "tfstate_sa" {
 
@@ -66,10 +52,7 @@ module "tfstate_sa" {
     versioning_enabled = true
   }
 
-  tags = {
-    env   = "homelab"
-    owner = "admin"
-  }
+  tags = var.tags
 }
 
 module "homelab_backup_sa" {
@@ -83,7 +66,7 @@ module "homelab_backup_sa" {
   access_tier = "Cool"
   location                   = azurerm_resource_group.homelab.location
   resource_group_name        = azurerm_resource_group.homelab.name
-  name                       = "offsitebackup${random_string.this.result}"
+  name                       = "${var.storage_account_name}${random_string.this.result}"
   https_traffic_only_enabled = true
   min_tls_version            = "TLS1_2"
   shared_access_key_enabled  = true
@@ -124,8 +107,5 @@ module "homelab_backup_sa" {
     }
   }
 
-  tags = {
-    env   = "homelab"
-    owner = "admin"
-  }
+  tags = var.tags
 }
