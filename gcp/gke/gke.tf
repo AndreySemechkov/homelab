@@ -15,7 +15,7 @@ module "gke" {
   remove_default_node_pool   = true
   create_service_account     = false
   default_max_pods_per_node  = 50
-  enable_private_endpoint    = true
+  enable_private_endpoint    = !var.enable_public_endpoint
   enable_private_nodes       = true
   kubernetes_version         = var.k8s_version
   dns_allow_external_traffic = true

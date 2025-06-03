@@ -93,3 +93,9 @@ variable "extra_node_pools" {
   }))
   default = {}
 }
+
+variable "enable_public_endpoint" {
+  description = "For dev lab use only, Whether to enable the public endpoint for the GKE cluster"
+  type        = bool
+  default     = false
+}
