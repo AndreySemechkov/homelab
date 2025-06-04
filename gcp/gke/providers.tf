@@ -1,4 +1,3 @@
-
 provider "google" {
   project = var.project_id
   region  = var.region
@@ -19,4 +18,12 @@ provider "google-beta" {
   project = var.project_id
   region  = var.region
   alias   = "spot"
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = module.gke.endpoint
+    cluster_ca_certificate = base64decode(module.gke.ca_certificate)
+    token                  = data.google_client_config.default.access_token
+  }
 }

@@ -9,13 +9,12 @@ module "vpc" {
   subnets = [
     {
       subnet_name           = "${var.environment}-subnet-01"
-      subnet_ip            = var.subnet_cidr
-      subnet_region        = var.region
+      subnet_ip             = var.subnet_cidr
+      subnet_region         = var.region
       subnet_private_access = true
-      subnet_flow_logs     = true
+      subnet_flow_logs      = true
     }
   ]
-
   secondary_ranges = {
     "${var.environment}-subnet-01" = [
       {
@@ -32,4 +31,19 @@ module "vpc" {
       },
     ]
   }
+}
+# used for egress access to the internet from a private a subnet
+module "cloud_router" {
+  source  = "terraform-google-modules/cloud-router/google"
+  version = "~> 7.0"
+
+  name    = "${var.environment}-router-gke"
+  project = var.project_id
+  region  = var.region
+  network = module.vpc.network_id
+
+  nats = [{
+    name                               = "${var.environment}-nat-gke"
+    source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+  }]
 }

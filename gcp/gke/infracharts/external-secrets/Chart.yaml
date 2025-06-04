@@ -1,0 +1,11 @@
+apiVersion: v2
+name: lab-external-secrets
+description: A Helm chart for deployment of external-secrets controller with cluster secret store enabled
+type: application
+version: 0.17.0
+appVersion: v0.17.0
+namespace: external-secrets
+dependencies:
+  - name: external-secrets
+    version: 0.17.0
+    repository: https://charts.external-secrets.io
