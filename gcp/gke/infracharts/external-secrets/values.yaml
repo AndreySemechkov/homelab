@@ -1,0 +1,20 @@
+external-secrets:
+  installCRDs: true
+  crds:
+    conversion:
+      enabled: false
+  webhook:
+    create: false
+  certController:
+    create: false
+  serviceMonitor:
+    enabled: true
+
+clusterSecretStore:
+  clusterName: "lab-gke"
+  name: "secretstore"
+  clusterLocation: "us-west1"
+  serviceAccountName: "external-secrets"
+
+projectID: "lab-gke"
+environment: "dev"

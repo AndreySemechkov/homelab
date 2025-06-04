@@ -62,7 +62,7 @@ resource "google_service_account_iam_binding" "external_dns_binding" {
 #external-secrets IAM
 resource "google_service_account" "external_secrets_sa" {
   project      = var.project_id
-  account_id   = "${var.environment}-external-secrets"
+  account_id   = "external-secrets"
   display_name = "external-secrets"
   description  = "Service account for external-secrets"
 }
@@ -73,10 +73,16 @@ resource "google_project_iam_member" "external_secrets_principal" {
   member  = "serviceAccount:${google_service_account.external_secrets_sa.email}"
 }
 
+resource "google_project_iam_member" "token_creator" {
+  project = var.project_id
+  member  = "serviceAccount:${google_service_account.external_secrets_sa.email}"
+  role    = "roles/iam.serviceAccountTokenCreator"
+}
+
 resource "google_service_account_iam_binding" "external_secrets_binding" {
   service_account_id = google_service_account.external_secrets_sa.name
   role               = "roles/iam.workloadIdentityUser"
   members = [
-    "serviceAccount:${module.gke.identity_namespace}[external-secrets/external-secrets]"
+    "serviceAccount:${module.gke.identity_namespace}[external-secrets/${var.environment}-external-secrets]"
   ]
 }
