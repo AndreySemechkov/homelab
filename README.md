@@ -86,6 +86,7 @@ az account set --subscription "your-subscription-id"
 
 ### GCP
 ```bash
+gcloud config set project <NAME>
 gcloud auth application-default login
 ```
 

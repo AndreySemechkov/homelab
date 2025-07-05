@@ -13,6 +13,7 @@ module "gke" {
   zones                      = local.gke_cluster_zones
   service_account            = google_service_account.k8s.email
   remove_default_node_pool   = true
+  deletion_protection        = false
   create_service_account     = false
   default_max_pods_per_node  = 50
   enable_private_endpoint    = !var.enable_public_endpoint

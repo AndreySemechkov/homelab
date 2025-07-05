@@ -3,10 +3,6 @@ external-secrets:
   crds:
     conversion:
       enabled: false
-  webhook:
-    create: false
-  certController:
-    create: false
   serviceMonitor:
     enabled: true
 

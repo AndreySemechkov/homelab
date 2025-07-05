@@ -3,6 +3,7 @@ resource "helm_release" "lab_external_secrets" {
   namespace        = "external-secrets"
   chart            = "${path.module}/infracharts/external-secrets"
   create_namespace = true
+  timeout          = 150
 
   values = [
     yamlencode({
@@ -11,7 +12,7 @@ resource "helm_release" "lab_external_secrets" {
       clusterSecretStore = {
         clusterName        = module.gke.name
         clusterLocation    = var.region
-        serviceAccountName = google_service_account.external_secrets_sa.name
+        serviceAccountName = google_service_account.external_secrets_sa.account_id
       }
       "external-secrets" = {
         serviceAccount = {
